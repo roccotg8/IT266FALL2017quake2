@@ -979,7 +979,6 @@ struct edict_s
 	//================================
 	int			movetype;
 	int			flags;
-
 	char		*model;
 	float		freetime;			// sv.time when the object was freed
 	
