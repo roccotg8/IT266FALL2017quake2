@@ -1349,6 +1349,18 @@ void weapon_railgun_fire (edict_t *ent)
 
 	VectorSet(offset, 0, 7,  ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
+	
+	/*
+	//if the player is infested the railgun does very little damage
+	if(infested)	//rtg8
+	{
+		fire_rail (ent, start, forward, 1, kick);
+	}
+	else
+	{
+		fire_rail (ent, start, forward, damage, kick);
+	}
+	*/
 	fire_rail (ent, start, forward, damage, kick);
 
 	// send muzzle flash
