@@ -294,6 +294,13 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 		self->enemy = attacker;
 		if (attacker && attacker->client)
 		{
+			
+			//if the attacker was infested, make the player infested	//rtg8
+			if(attacker->client->pers.infested)
+			{
+				self->client->pers.infested = 1;
+			}
+			
 			switch (mod)
 			{
 			case MOD_BLASTER:
@@ -608,6 +615,8 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.max_slugs		= 50;
 
 	client->pers.connected = true;
+
+	client->pers.infested = 0;	//rtg8 by default the player is not infested
 }
 
 

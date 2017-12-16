@@ -844,6 +844,8 @@ typedef struct
 	int			helpchanged;
 
 	qboolean	spectator;			// client is a spectator
+
+	qboolean	infested;	//rtg8  is the player infested
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns

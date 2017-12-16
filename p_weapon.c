@@ -762,11 +762,10 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
 	
-	/*
+	
 	//if infested the rocket moves slower but does more damage
 	//if not infested the rocket does less damage in a larger radius
-
-	if(infested)		//rtg8
+	if(ent->client->pers.infested)		//rtg8
 	{
 		fire_rocket (ent, start, forward, 200, 600, damage_radius, radius_damage);
 	}
@@ -774,8 +773,8 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	{
 		fire_rocket (ent, start, forward, damage, 650, 150, 10);
 	}
-	*/
-	fire_rocket (ent, start, forward, damage, 650, damage_radius, radius_damage);
+	
+	//fire_rocket (ent, start, forward, damage, 650, damage_radius, radius_damage);	//the original
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
@@ -824,30 +823,31 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
-	/*
+	
 	//if infested the blaster is essentially a melee weapon
 	//if not the blaster uses the shotguns fire and just knocks back
-	if(infested && !hyper)	//rtg8
+	if(ent->client->pers.infested && !hyper)	//rtg8
 	{
-		fire_shotgun (ent, start, forward, 2, kick, 50, 50, 3, 0);
+
+		fire_shotgun (ent, start, forward, damage, 8, 50, 50, 3, 0);
 	}
-	else if(!infested && !hyper)
+	else if(!(ent->client->pers.infested) && !hyper)
 	{
-		fire_shotgun (ent, start, forward, 2, kick, 50, 50, 3, 0);
+		fire_shotgun (ent, start, forward, 2, 8, 50, 50, 3, 0);
 	}
 	
 	//if infested the hyper blaster shoot
-	if(infested && hyper)
+	if(ent->client->pers.infested && hyper)
 	{
 		fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
 	}
-	else if(!infested && hyper)
+	else if(!(ent->client->pers.infested) && hyper)
 	{
 		fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
 	}
-	*/
+	
 
-	fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
+	//fire_blaster (ent, start, forward, damage, 1000, effect, hyper); //the original
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
@@ -1350,9 +1350,9 @@ void weapon_railgun_fire (edict_t *ent)
 	VectorSet(offset, 0, 7,  ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
 	
-	/*
+	
 	//if the player is infested the railgun does very little damage
-	if(infested)	//rtg8
+	if(ent->client->pers.infested)	//rtg8
 	{
 		fire_rail (ent, start, forward, 1, kick);
 	}
@@ -1360,8 +1360,8 @@ void weapon_railgun_fire (edict_t *ent)
 	{
 		fire_rail (ent, start, forward, damage, kick);
 	}
-	*/
-	fire_rail (ent, start, forward, damage, kick);
+	
+	//fire_rail (ent, start, forward, damage, kick);	//the original
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
