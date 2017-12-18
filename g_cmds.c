@@ -881,6 +881,25 @@ void Cmd_PlayerList_f(edict_t *ent)
 }
 
 
+void Cmd_Infested_f(edict_t *ent)	//rtg8
+{
+	int i;
+	i = atoi(gi.argv(1));
+
+	switch(i)
+	{
+	case 0:
+		gi.cprintf(ent, PRINT_HIGH, "You are no longer Infested\n");
+		ent->client->pers.infested = 0;
+		break;
+	case 1:
+	default:
+		gi.cprintf(ent, PRINT_HIGH, "You are Infested\n");
+		ent->client->pers.infested = 1;
+		break;
+	}
+}
+
 /*
 =================
 ClientCommand
@@ -968,6 +987,8 @@ void ClientCommand (edict_t *ent)
 		Cmd_Wave_f (ent);
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
+	else if(Q_stricmp(cmd, "infested") == 0)	//rtg8
+		Cmd_Infested_f(ent);
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }

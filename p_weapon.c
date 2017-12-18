@@ -823,29 +823,26 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
-	
 	//if infested the blaster is essentially a melee weapon
-	//if not the blaster uses the shotguns fire and just knocks back
 	if(ent->client->pers.infested && !hyper)	//rtg8
-	{
-
-		fire_shotgun (ent, start, forward, damage, 8, 50, 50, 3, 0);
-	}
-	else if(!(ent->client->pers.infested) && !hyper)
 	{
 		fire_shotgun (ent, start, forward, 2, 8, 50, 50, 3, 0);
 	}
-	
-	//if infested the hyper blaster shoot
-	if(ent->client->pers.infested && hyper)
+	//and the hyper blaseter is normal
+	else if(ent->client->pers.infested && hyper)
 	{
 		fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
 	}
-	else if(!(ent->client->pers.infested) && hyper)
+	//if not infested the blaster uses the shotguns fire and does low damage
+	else if((ent->client->pers.infested == 0) && !hyper)
 	{
-		fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
+		fire_shotgun (ent, start, forward, 5, 8, 50, 50, 3, 0);
 	}
-	
+	//and the hyper blaster uses the shotguns fire and does much less damage
+	else if((ent->client->pers.infested == 0) && hyper)
+	{
+		fire_shotgun (ent, start, forward, 2, 8, 50, 50, 3, 0);
+	}
 
 	//fire_blaster (ent, start, forward, damage, 1000, effect, hyper); //the original
 
@@ -1352,9 +1349,9 @@ void weapon_railgun_fire (edict_t *ent)
 	
 	
 	//if the player is infested the railgun does very little damage
-	if(ent->client->pers.infested)	//rtg8
+	if(ent->client->pers.infested == 1)	//rtg8
 	{
-		fire_rail (ent, start, forward, 1, kick);
+		fire_rail (ent, start, forward, 5, kick);
 	}
 	else
 	{
