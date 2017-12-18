@@ -764,14 +764,14 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	
 	
 	//if infested the rocket moves slower but does more damage
-	//if not infested the rocket does less damage in a larger radius
 	if(ent->client->pers.infested)		//rtg8
 	{
-		fire_rocket (ent, start, forward, 200, 600, damage_radius, radius_damage);
+		fire_rocket (ent, start, forward, 200, 100, damage_radius, radius_damage);
 	}
+	//if not infested the rocket does less damage in a larger radius
 	else
 	{
-		fire_rocket (ent, start, forward, damage, 650, 150, 10);
+		fire_rocket (ent, start, forward, 10, 650, 20, 300);
 	}
 	
 	//fire_rocket (ent, start, forward, damage, 650, damage_radius, radius_damage);	//the original
@@ -836,7 +836,7 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	//if not infested the blaster uses the shotguns fire and does low damage
 	else if((ent->client->pers.infested == 0) && !hyper)
 	{
-		fire_shotgun (ent, start, forward, 5, 8, 50, 50, 3, 0);
+		fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
 	}
 	//and the hyper blaster uses the shotguns fire and does much less damage
 	else if((ent->client->pers.infested == 0) && hyper)
@@ -1026,7 +1026,19 @@ void Machinegun_Fire (edict_t *ent)
 	AngleVectors (angles, forward, right, NULL);
 	VectorSet(offset, 0, 8, ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
-	fire_bullet (ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_MACHINEGUN);
+	
+	//if infested the machine gun fires low damage shotgun rounds
+	if(ent->client->pers.infested)	//rtg8
+	{
+		fire_rocket(ent, start, forward, 1, 5, 20, 1);
+	}
+	else if(ent->client->pers.infested == 0)
+	{
+		fire_blaster (ent, start, forward, 8, 1000, 0, 0);
+		fire_blaster (ent, start, forward, 3, 1000, 0, 0);
+	}
+
+	//fire_bullet (ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_MACHINEGUN);	//the original
 
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
@@ -1225,9 +1237,67 @@ void weapon_shotgun_fire (edict_t *ent)
 	}
 
 	if (deathmatch->value)
-		fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+	{
+		//regular shotgun
+		if(MOD_SHOTGUN == 0)
+		{
+			//if infested the shotgun has lower damage
+			if(ent->client->pers.infested)	//rtg8
+			{
+				fire_shotgun (ent, start, forward, 10, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+			}
+			//if not infested the shotgun has very low damage but a tighter spread
+			else
+			{
+				fire_shotgun (ent, start, forward, 1, kick, 50, 50, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+			}
+		}
+		//super shotgun
+		else
+		{
+			//if infested the super shotgun has lower damage and high spread
+			if(ent->client->pers.infested)	//rtg8
+			{
+				fire_shotgun (ent, start, forward, 15, kick, 1000, 1000, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+			}
+			//if not infested the shotgun has low damage but a tighter spread
+			else
+			{
+				fire_shotgun (ent, start, forward, 4, kick, 50, 50, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+			}
+		}
+		//fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);	//the original
+	}
 	else
-		fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_SHOTGUN_COUNT, MOD_SHOTGUN);
+	{
+		if(MOD_SHOTGUN == 0)
+		{
+			//if infested the shotgun has lower damage
+			if(ent->client->pers.infested)	//rtg8
+			{
+				fire_shotgun (ent, start, forward, 10, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+			}
+			//if not infested the shotgun has very low damage but a tighter spread
+			else
+			{
+				fire_shotgun (ent, start, forward, 1, kick, 50, 50, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+			}
+		}
+		else
+		{
+			//if infested the super shotgun has lower damage and high spread
+			if(ent->client->pers.infested)	//rtg8
+			{
+				fire_shotgun (ent, start, forward, 15, kick, 1000, 1000, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+			}
+			//if not infested the shotgun has low damage but a tighter spread
+			else
+			{
+				fire_shotgun (ent, start, forward, 4, kick, 50, 50, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+			}
+		}
+		//fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_SHOTGUN_COUNT, MOD_SHOTGUN);	//the original
+	}
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
