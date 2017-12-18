@@ -460,6 +460,13 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 	//treat cheat/powerup savings the same as armor
 	asave += save;
 
+	//check to see if infested shot an infested or a non infested shot a non infested
+	if(((inflictor->client->pers.infested == 1) && (targ->client->pers.infested == 1)) || ((inflictor->client->pers.infested == 0) && (targ->client->pers.infested == 0)))	//rtg8
+	{
+		take = 0;
+		save = damage;
+	}
+
 	// team damage avoidance
 	if (!(dflags & DAMAGE_NO_PROTECTION) && CheckTeamDamage (targ, attacker))
 		return;
